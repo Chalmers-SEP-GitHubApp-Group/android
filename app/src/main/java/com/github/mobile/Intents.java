@@ -28,6 +28,8 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.User;
 
+import com.github.mobile.ui.notification.Notification;
+
 /**
  * Helper for creating intents
  */
@@ -171,6 +173,11 @@ public class Intents {
     public static final String EXTRA_PATH = INTENT_EXTRA_PREFIX + "PATH";
 
     /**
+     * Notification handle
+     */
+    public static final String EXTRA_NOTIFICATION = INTENT_EXTRA_PREFIX + "NOTIFICATION";
+
+    /**
      * Resolve the {@link RepositoryId} referenced by the given intent
      *
      * @param intent
@@ -270,6 +277,16 @@ public class Intents {
          */
         public Builder user(User user) {
             return add(EXTRA_USER, user);
+        }
+
+        /**
+         * Add user to intent being built up
+         *
+         * @param user
+         * @return this builder;
+         */
+        public Builder notification(Notification notification) {
+            return add(EXTRA_NOTIFICATION, notification);
         }
 
         /**

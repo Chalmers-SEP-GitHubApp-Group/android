@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/LinearLayout_parent"
+              android:layout_width="fill_parent"
+              android:layout_height="?android:attr/listPreferredItemHeight"
+              android:padding="6dip"
+              android:orientation="vertical"
+        >
+
+    <LinearLayout
+            android:id="@+id/linearLayout_titleRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="0dp">
+
+        <View android:id="@+id/notification_item_circle"
+              android:layout_width="10dp"
+              android:layout_height="10dp"
+              android:layout_gravity="center_vertical"
+              android:background="@drawable/notification_circle"/>
+
+        <TextView
+                android:id="@+id/notification_item_title"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_weight="4"
+                android:gravity="center_vertical"
+                android:text="New Commit"
+                android:textSize="16sp"
+                />
+
+        <TextView
+                android:id="@+id/notification_item_date"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2014-06-01"
+                android:textSize="12sp"
+                />
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/notification_item_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="14dp"
+            android:text="to branch 'master'"
+            android:textSize="12sp" />
+
+</LinearLayout>

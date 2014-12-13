@@ -340,6 +340,30 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+                android:name=".ui.notification.NotificationDashboardActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:hardwareAccelerated="true" >
+            <intent-filter>
+                <action android:name="com.github.mobile.notification.dashboard.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".ui.notification.NotificationActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:hardwareAccelerated="true" >
+            <intent-filter>
+                <action android:name="com.github.mobile.notification.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!--<meta-data
+                    android:name="android.app.default_searchable"
+                    android:value=".ui.issue.IssueSearchActivity" />-->
+        </activity>
 
         <service
             android:name=".sync.SyncAdapterService"

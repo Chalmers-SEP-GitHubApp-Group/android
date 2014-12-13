@@ -19,6 +19,7 @@ import static com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_BOOKMARKS;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_DASHBOARD;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_GISTS;
+import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_NOTIFICATION_DASHBOARD;
 import static com.github.mobile.util.TypefaceUtils.ICON_FOLLOW;
 import static com.github.mobile.util.TypefaceUtils.ICON_NEWS;
 import static com.github.mobile.util.TypefaceUtils.ICON_PUBLIC;
@@ -46,6 +47,8 @@ import com.github.mobile.ui.TabPagerActivity;
 import com.github.mobile.ui.gist.GistsActivity;
 import com.github.mobile.ui.issue.FiltersViewActivity;
 import com.github.mobile.ui.issue.IssueDashboardActivity;
+import com.github.mobile.ui.notification.NotificationDashboardActivity;
+import com.github.mobile.ui.notification.NotificationHandler;
 import com.github.mobile.ui.repo.OrganizationLoader;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.PreferenceUtils;
@@ -92,11 +95,23 @@ public class HomeActivity extends TabPagerActivity<HomePagerAdapter> implements
     @Inject
     private SharedPreferences sharedPreferences;
 
+    private NotificationHandler handler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        handler = new NotificationHandler(this);
+
+        handler.start();
+
         getSupportLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        handler.stop();
+        super.onDestroy();
     }
 
     private void reloadOrgs() {
@@ -226,6 +241,9 @@ public class HomeActivity extends TabPagerActivity<HomePagerAdapter> implements
                 break;
             case ACTION_BOOKMARKS:
                 startActivity(FiltersViewActivity.createIntent());
+                break;
+            case ACTION_NOTIFICATION_DASHBOARD:
+                startActivity(NotificationDashboardActivity.createIntent());
                 break;
             }
             int orgSelected = homeAdapter.getSelected();

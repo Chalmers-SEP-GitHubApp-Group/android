@@ -178,6 +178,7 @@ public class AccountDataManager {
                 .loadOrRequest(resource);
     }
 
+
     /**
      * Get bookmarked issue filters
      * <p/>
