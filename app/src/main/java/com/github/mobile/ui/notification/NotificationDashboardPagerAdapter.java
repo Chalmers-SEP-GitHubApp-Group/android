@@ -69,7 +69,7 @@ public class NotificationDashboardPagerAdapter extends FragmentStatePagerAdapter
             case 0: // TODO fix strings
                 return "Notifications";
             case 1:
-                return "NOT. Settings";
+                return "Settings";
             //resources.getString(string.tab_mentioned);
             default:
                 return null;

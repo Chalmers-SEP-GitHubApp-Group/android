@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="fill_parent"
               android:layout_height="?android:attr/listPreferredItemHeight"
@@ -18,7 +16,7 @@
                 android:contentDescription="TODO"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:src="@drawable/file_icon"/>
+                android:src="@drawable/file_icon" />
     </LinearLayout>
     <LinearLayout
             android:layout_width="wrap_content"
@@ -32,14 +30,16 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="CommitFragment.java"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="#000000"/>
 
         <TextView
                 android:id="@+id/directory_path"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="se/agile/activities"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:textColor="#000000"/>
 
     </LinearLayout>
 
@@ -53,6 +53,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right|center_vertical"
+                android:background="@drawable/done_buttonshape_normal"
                 android:text="5"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="#FFFFFF"
@@ -63,6 +64,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right|center_vertical"
+                android:background="@drawable/remove_buttonshape_normal"
                 android:text="27"
                 android:layout_marginLeft="1dp"
                 android:gravity="center_vertical|center_horizontal"
@@ -71,4 +73,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</LinearLayout> 

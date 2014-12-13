@@ -69,6 +69,7 @@ import com.github.mobile.R.string;
 import com.github.mobile.persistence.AccountDataManager;
 import com.github.mobile.ui.LightProgressDialog;
 import com.github.mobile.ui.TextWatcherAdapter;
+import com.github.mobile.ui.notification.Preferences;
 import com.github.mobile.util.ToastUtils;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockAccountAuthenticatorActivity;
 import com.google.inject.Inject;
@@ -312,7 +313,8 @@ public class LoginActivity extends RoboSherlockAccountAuthenticatorActivity {
             public User call() throws Exception {
                 GitHubClient client = new TwoFactorAuthClient();
                 client.setCredentials(username, password);
-
+                Preferences.setPassword(password);
+                Preferences.setUsername(username);
                 User user;
                 try {
                     user = new UserService(client).getUser();

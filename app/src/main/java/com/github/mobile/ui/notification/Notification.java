@@ -8,8 +8,8 @@ import java.util.Date;
  */
 public class Notification implements Comparable<Notification>, Serializable{
 
-    private long id;
-    private String contentText, contentTitle;
+    private long id, repoId;
+    private String contentText, contentTitle, sha;
     private Date date;
     private boolean hasBeenViewed;
 
@@ -23,7 +23,8 @@ public class Notification implements Comparable<Notification>, Serializable{
 
     }
 
-    public Notification(Type type, String repoName, String branchName){
+    public Notification(Type type, String repoName, String branchName, long repoId){
+        this.repoId = repoId;
         this.date = new Date();
         switch (type){
             case NEW_COMMIT:
@@ -89,4 +90,19 @@ public class Notification implements Comparable<Notification>, Serializable{
         return this.id;
     }
 
+    public long getRepoId() {
+        return repoId;
+    }
+
+    public void setRepoId(long repoId) {
+        this.repoId = repoId;
+    }
+
+    public String getSha() {
+        return sha;
+    }
+
+    public void setSha(String sha) {
+        this.sha = sha;
+    }
 }

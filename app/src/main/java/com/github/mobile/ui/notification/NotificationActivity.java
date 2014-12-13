@@ -17,11 +17,17 @@ package com.github.mobile.ui.notification;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -41,6 +47,20 @@ import com.github.mobile.ui.issue.FilterListFragment;
 import com.github.mobile.ui.user.HomeActivity;
 import com.google.inject.Inject;
 import com.github.mobile.Intents;
+
+import javax.xml.soap.Text;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.zip.Inflater;
+
+import org.eclipse.egit.github.core.Commit;
+import org.eclipse.egit.github.core.CommitFile;
+import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryCommit;
+import org.eclipse.egit.github.core.client.GitHubClient;
+import org.eclipse.egit.github.core.service.CommitService;
+import org.eclipse.egit.github.core.service.DataService;
 
 /**
  * Activity to display a list of saved {@link com.github.mobile.core.issue.IssueFilter} objects
@@ -65,11 +85,13 @@ public class NotificationActivity extends DialogFragmentActivity{
 
 //    private FilterListFragment fragment;
 
+    private TextView committer, date, message, sha, totalAdditions, totalDeletions;
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.notification_newcommit);
-
+        context = this;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Notification");
         actionBar.setIcon(drawable.ic_action_email);
@@ -77,39 +99,74 @@ public class NotificationActivity extends DialogFragmentActivity{
         Notification notification = (Notification) getIntent().getSerializableExtra(EXTRA_NOTIFICATION);
 
 
+        committer = (TextView) findViewById(id.commit_committer);
+        date = (TextView) findViewById(id.commit_date);
+        message = (TextView) findViewById(id.Commit_Message);
+        sha = (TextView) findViewById(id.Commit_SHA);
+        totalAdditions = (TextView) findViewById(id.commit_total_additions);
+        totalDeletions = (TextView) findViewById(id.commit_total_deletions);
+        committer.setText("Committer: ");
+        date.setText("");
+        message.setText("");
+        sha.setText("");
+        totalAdditions.setText("Total Additions: ");
+        totalDeletions.setText("Total Deletions: ");
 
-        TextView committer = (TextView) findViewById(id.commit_committer);
-        committer.setText("Committer: " + "TITLE: " + notification.getContentTitle() + " text: " + notification.getContentText());
+        new AsyncTask<Notification, Void, RepositoryCommit>(){
 
+            @Override
+            protected RepositoryCommit doInBackground(Notification... params) {
+                Notification notification = params[0];
 
-//        TextView date = (TextView) rootView.findViewById(R.id.commit_date);
-//        TextView message = (TextView) rootView.findViewById(R.id.Commit_Message);
-//        TextView sha = (TextView) rootView.findViewById(R.id.Commit_SHA);
-//        TextView totalAdditions = (TextView) rootView.findViewById(R.id.commit_total_additions);
-//        TextView totalDeletions = (TextView) rootView.findViewById(R.id.commit_total_deletions);
+                if(notification.getContentTitle().contains("Commit")){
+                    DBHelper dbhelper = DatabaseManager.getInstance();
+                    SQLiteDatabase db = dbhelper.getReadableDatabase();
 
-//        committer.setText("Committer: " + commit.getCommitter().getName());
-//        Date dateObj = commit.getDate();
-//        String formatedDate = DateFormat.getDateFormat(context).format(dateObj) + " " + DateFormat.getTimeFormat(context).format(dateObj);
-//        date.setText(formatedDate);
-//        message.setText(commit.getMessage());
-//        sha.setText(commit.getSha());
-//        ArrayList<File> files = commit.getChangedFiles();
-//        Collections.sort(files);
-//        int additions = 0;
-//        int deletions = 0;
-//        for(File file : files){
-//            addRowView(file);
-//            additions += file.getAdditions();
-//            deletions += file.getDeletions();
-//        }
-//        totalAdditions.setText("Total Additions: " + additions);
-//        totalDeletions.setText("Total Deletions: " + deletions);
+                    RepositoryDataSource dataSource = new RepositoryDataSource();
 
 
-//        fragment = (FilterListFragment) getSupportFragmentManager()
-//                .findFragmentById(android.R.id.list);
-//        fragment.getListView().setOnItemLongClickListener(this);
+                    Repository repo = dataSource.find(db, notification.getRepoId());
+
+                    GitHubClient client = new GitHubClient();
+                    client.setCredentials(Preferences.getUsername(), Preferences.getPassword());
+                    CommitService service = new CommitService(client);
+
+                    try {
+                        return service.getCommit(repo, notification.getSha());
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }else{
+
+                }
+
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(RepositoryCommit commit){
+                if(commit == null){
+                    //FUCK
+                }else{
+                    committer.setText("Committer: " + commit.getCommit().getCommitter().getName());
+                    Date createdDate = commit.getCommit().getCommitter().getDate();
+                    String formatedDate = DateFormat.getDateFormat(context).format(createdDate) + " " + DateFormat.getTimeFormat(context).format(createdDate);
+                    date.setText(formatedDate);
+                    message.setText(commit.getCommit().getMessage());
+                    sha.setText(commit.getSha());
+
+                    List<CommitFile> files = commit.getFiles();
+                    //Collections.sort(files);
+
+                    for(CommitFile file : files){
+                        addRowView(file);
+                    }
+                    totalAdditions.setText("Total Additions: " + commit.getStats().getAdditions());
+                    totalDeletions.setText("Total Deletions: " + commit.getStats().getDeletions());
+                }
+            }
+        }.execute(notification);
     }
 
     @Override
@@ -123,5 +180,27 @@ public class NotificationActivity extends DialogFragmentActivity{
         default:
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void addRowView(CommitFile file){
+        ViewGroup parent = (ViewGroup) findViewById(id.commit_changed_files_list);
+        View rowView = this.getLayoutInflater().inflate(layout.notification_newcommit_diffrow, parent, false);
+
+        if(file.getStatus().equals("added")){
+            ImageView icon = (ImageView) rowView.findViewById(id.directory_icon);
+            icon.setImageResource(drawable.file_added);
+        }else if(file.getStatus().equals("removed")){
+            ImageView icon = (ImageView) rowView.findViewById(id.directory_icon);
+            icon.setImageResource(drawable.file_deleted);
+        }
+        TextView name = (TextView) rowView.findViewById(id.directory_name);
+        TextView path = (TextView) rowView.findViewById(id.directory_path);
+        TextView additions = (TextView) rowView.findViewById(id.commit_list_additions);
+        TextView deletions = (TextView) rowView.findViewById(id.commit_list_deletions);
+        name.setText(file.getFilename());
+        path.setText(file.getStatus());
+        additions.setText(file.getAdditions() + "");
+        deletions.setText(file.getDeletions() + "");
+        parent.addView(rowView);
     }
 }

@@ -23,15 +23,17 @@ public class NotificationDataSource implements DataSource<Notification>{
     public static String COLUMN_CONTENT_TEXT = "contentText";
     public static String COLUMN_DATE = "date";
     public static String COLUMN_HAS_BEEN_VIEWED = "hasBeenViewed";
+    public static String COLUMN_REPO_ID = "repoId";
+    public static String COLUMN_COMMIT_SHA = "sha";
 
     private static List<DataSourceListener> listenerList = new ArrayList<DataSourceListener>();
 
     public static String getCreateTableString(){
         return "CREATE TABLE "+TABLE_NAME+" ("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+COLUMN_CONTENT_TITLE+" TEXT, "+COLUMN_CONTENT_TEXT+" TEXT, " +
-            COLUMN_DATE+" TEXT, "+COLUMN_HAS_BEEN_VIEWED+" INTEGER);";
+            COLUMN_DATE+" TEXT, "+COLUMN_HAS_BEEN_VIEWED+" INTEGER, "+COLUMN_REPO_ID+" INTEGER, "+COLUMN_COMMIT_SHA+" TEXT);";
     }
 
-    private static String[] AllColumns = {COLUMN_ID, COLUMN_CONTENT_TITLE, COLUMN_CONTENT_TEXT, COLUMN_DATE, COLUMN_HAS_BEEN_VIEWED};
+    private static String[] AllColumns = {COLUMN_ID, COLUMN_CONTENT_TITLE, COLUMN_CONTENT_TEXT, COLUMN_DATE, COLUMN_HAS_BEEN_VIEWED, COLUMN_REPO_ID, COLUMN_COMMIT_SHA};
 
 
 
@@ -47,6 +49,8 @@ public class NotificationDataSource implements DataSource<Notification>{
             values.put(COLUMN_CONTENT_TEXT, notification.getContentText());
             values.put(COLUMN_DATE, parseDateToString(notification.getDate()));
             values.put(COLUMN_HAS_BEEN_VIEWED, notification.hasBeenViewed());
+            values.put(COLUMN_REPO_ID, notification.getRepoId());
+            values.put(COLUMN_COMMIT_SHA, notification.getSha());
             long insertId = database.insert(TABLE_NAME, null, values);
         }
         Log.d(TAG, "Adding list of notifications to the database");
@@ -60,6 +64,8 @@ public class NotificationDataSource implements DataSource<Notification>{
         values.put(COLUMN_CONTENT_TEXT, notification.getContentText());
         values.put(COLUMN_DATE, parseDateToString(notification.getDate()));
         values.put(COLUMN_HAS_BEEN_VIEWED, notification.hasBeenViewed());
+        values.put(COLUMN_REPO_ID, notification.getRepoId());
+        values.put(COLUMN_COMMIT_SHA, notification.getSha());
 
         long insertId = database.insert(TABLE_NAME, null, values);
         Log.d(TAG, "Adding one notification to the database");
@@ -94,7 +100,8 @@ public class NotificationDataSource implements DataSource<Notification>{
             values.put(COLUMN_CONTENT_TEXT, notification.getContentText());
             values.put(COLUMN_DATE, parseDateToString(notification.getDate()));
             values.put(COLUMN_HAS_BEEN_VIEWED, notification.hasBeenViewed());
-
+            values.put(COLUMN_REPO_ID, notification.getRepoId());
+            values.put(COLUMN_COMMIT_SHA, notification.getSha());
             long insertId = database.update(TABLE_NAME, values, COLUMN_ID + "=" + notification.getId(), null);
         }else{
             Log.e(TAG, "Notification had no id set!");
@@ -121,11 +128,13 @@ public class NotificationDataSource implements DataSource<Notification>{
 
     private Notification cursorToNotification(Cursor cursor) {
         Notification notification = new Notification();
-        notification.setId(cursor.getInt(0));
+        notification.setId(cursor.getLong(0));
         notification.setContentTitle(cursor.getString(1));
         notification.setContentText(cursor.getString(2));
         notification.setDate(parseStringToDate(cursor.getString(3)));
         notification.setHasBeenViewed(cursor.getInt(4) == 1);
+        notification.setRepoId(cursor.getLong(5));
+        notification.setSha(cursor.getString(6));
 
         return notification;
     }

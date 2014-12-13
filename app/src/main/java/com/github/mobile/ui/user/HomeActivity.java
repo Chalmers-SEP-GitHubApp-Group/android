@@ -49,6 +49,7 @@ import com.github.mobile.ui.issue.FiltersViewActivity;
 import com.github.mobile.ui.issue.IssueDashboardActivity;
 import com.github.mobile.ui.notification.NotificationDashboardActivity;
 import com.github.mobile.ui.notification.NotificationHandler;
+import com.github.mobile.ui.notification.Preferences;
 import com.github.mobile.ui.repo.OrganizationLoader;
 import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.PreferenceUtils;
@@ -104,6 +105,7 @@ public class HomeActivity extends TabPagerActivity<HomePagerAdapter> implements
         handler = new NotificationHandler(this);
 
         handler.start();
+        Preferences.initializePreferences(this);
 
         getSupportLoaderManager().initLoader(0, null, this);
     }
