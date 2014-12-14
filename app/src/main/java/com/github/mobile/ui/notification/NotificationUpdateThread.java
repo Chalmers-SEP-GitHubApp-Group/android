@@ -95,7 +95,9 @@ public class NotificationUpdateThread extends AsyncTask<Context, Void, List<Noti
                                     //Gone through all and haven't found any branch with the same name
                                     //new branch!
                                     branchDAO.create(db, new RepositoryBranchWrapper(repo.getId(), branch));
-                                    notifications.add(new Notification(Notification.Type.NEW_BRANCH, repo.getName(), branch.getName(), repo.getId()));
+                                    Notification not = new Notification(Notification.Type.NEW_BRANCH, repo.getName(), branch.getName(), repo.getId());
+                                    not.setSha(branch.getCommit().getSha());
+                                    notifications.add(not);
                                 }
                             }
                         }

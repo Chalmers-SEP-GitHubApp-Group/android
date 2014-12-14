@@ -118,7 +118,8 @@ public class NotificationActivity extends DialogFragmentActivity{
             protected RepositoryCommit doInBackground(Notification... params) {
                 Notification notification = params[0];
 
-                if(notification.getContentTitle().contains("Commit")){
+                if(! notification.getContentTitle().contains("Repository")){
+                    //new branch or new commit...
                     DBHelper dbhelper = DatabaseManager.getInstance();
                     SQLiteDatabase db = dbhelper.getReadableDatabase();
 
@@ -137,7 +138,7 @@ public class NotificationActivity extends DialogFragmentActivity{
                         e.printStackTrace();
                     }
                 }else{
-
+                    //new repo... no view for that yet...
                 }
 
 

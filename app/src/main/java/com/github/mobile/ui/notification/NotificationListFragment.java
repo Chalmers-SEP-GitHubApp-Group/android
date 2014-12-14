@@ -71,7 +71,7 @@ public class NotificationListFragment extends DialogFragment implements DataSour
                 NotificationDataSource dao = new NotificationDataSource();
                 dao.update(db, not);
                 adapter.notifyDataSetChanged();
-                if(not.getContentTitle().contains("Commit")){
+                if(!not.getContentTitle().contains("Repository")){
                     startActivity(NotificationActivity.createIntent(not));
                 }
             }
