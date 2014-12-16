@@ -45,6 +45,7 @@
     <string name="error_checking_following_status">Checking following status failed</string>
     <string name="error_starring_repository">Starring failed</string>
     <string name="error_unstarring_repository">Unstarring failed</string>
+    <string name="error_forking_repository">Forking failed</string>
     <string name="error_checking_starring_status">Checking starring status failed</string>
     <string name="error_rendering_markdown">Rendering markdown failed</string>
     <string name="error_users_search">Searching users failed</string>
@@ -162,6 +163,10 @@
     <string name="confirm_gist_delete_message">Are you sure you want to delete this Gist?</string>
     <string name="deleting_gist">Deleting Gist…</string>
     <string name="creating_comment">Creating comment…</string>
+    <string name="editing_comment">Editing comment…</string>
+    <string name="deleting_comment">Deleting comment…</string>
+    <string name="confirm_comment_delete_title">Remove Comment</string>
+    <string name="confirm_comment_delete_message">Are you sure you want to delete this Comment?</string>
     <string name="confirm_bookmark_delete_message">Are you sure you want to remove this bookmark?</string>
     <string name="issue_dashboard">Issue Dashboard</string>
     <string name="new_issue">New Issue</string>
@@ -195,6 +200,7 @@
     <string name="unfollow">Unfollow</string>
     <string name="star">Star</string>
     <string name="unstar">Unstar</string>
+    <string name="fork">Fork</string>
     <string name="members">Members</string>
     <string name="closing_issue">Closing Issue…</string>
     <string name="reopening_issue">Reopening Issue…</string>
@@ -244,6 +250,7 @@
     <string name="unfollowing_user">Unfollowing…</string>
     <string name="starring_repository">Starring…</string>
     <string name="unstarring_repository">Unstarring…</string>
+    <string name="forking_repository">Forking…</string>
     <string name="navigate_to">Navigate to…</string>
     <string name="navigate_to_user">Navigate to %s</string>
     <string name="contributions">%d commits</string>
@@ -274,5 +281,7 @@
     <string name="preview">Preview</string>
     <string name="show_raw_markdown">Show raw markdown</string>
     <string name="render_markdown">Render markdown</string>
+    <string name="copy_hash">Copy hash</string>
+    <string name="toast_msg_copied">Copied to clipboard</string>
 
 </resources>
