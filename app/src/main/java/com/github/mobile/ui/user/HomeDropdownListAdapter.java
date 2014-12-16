@@ -40,6 +40,11 @@ import org.eclipse.egit.github.core.User;
 public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
 
     /**
+     * Action for notifications
+     */
+    public static final int ACTION_NOTIFICATION_DASHBOARD = 3;
+
+    /**
      * Action for Gists
      */
     public static final int ACTION_GISTS = 0;
@@ -54,7 +59,7 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
      */
     public static final int ACTION_BOOKMARKS = 2;
 
-    private static final int NON_ORG_ITEMS = 3;
+    private static final int NON_ORG_ITEMS = 4;
 
     private final AvatarLoader avatars;
 
@@ -122,7 +127,8 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
         if (orgCount > 0)
             all.addAll(orgs);
 
-        // Add dummy objects for gists, issue dashboard, and bookmarks
+        // Add dummy objects for gists, issue dashboard, NOTIFICATION and bookmarks
+        all.add(new Object());
         all.add(new Object());
         all.add(new Object());
         all.add(new Object());
@@ -195,7 +201,12 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
         case ACTION_BOOKMARKS:
             setText(0, string.bookmarks);
             setActionIcon(imageView(1), drawable.dropdown_bookmark);
-            break;
+        break;
+        case ACTION_NOTIFICATION_DASHBOARD:
+            //setText(0, string.bookmarks); TODO fix the string
+            setText(0, "Notification");
+            setActionIcon(imageView(1), drawable.ic_action_email);
+        break;
         default:
             User user = (User) item;
             setText(0, user.getLogin());
