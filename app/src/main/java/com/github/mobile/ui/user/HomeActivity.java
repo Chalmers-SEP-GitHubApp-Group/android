@@ -16,6 +16,7 @@
 package com.github.mobile.ui.user;
 
 import static com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST;
+import static com.github.mobile.accounts.AccountConstants.ACCOUNT_TYPE;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_BOOKMARKS;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_DASHBOARD;
 import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_GISTS;
@@ -25,6 +26,9 @@ import static com.github.mobile.util.TypefaceUtils.ICON_NEWS;
 import static com.github.mobile.util.TypefaceUtils.ICON_PUBLIC;
 import static com.github.mobile.util.TypefaceUtils.ICON_TEAM;
 import static com.github.mobile.util.TypefaceUtils.ICON_WATCH;
+import static com.github.mobile.ui.user.HomeDropdownListAdapter.ACTION_LOGOUT;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -55,7 +59,13 @@ import com.github.mobile.util.AvatarLoader;
 import com.github.mobile.util.PreferenceUtils;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-
+import com.github.mobile.accounts.LoginActivity;
+import java.io.IOException;
+import android.accounts.Account;
+import android.os.Build;
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -247,6 +257,11 @@ public class HomeActivity extends TabPagerActivity<HomePagerAdapter> implements
             case ACTION_NOTIFICATION_DASHBOARD:
                 startActivity(NotificationDashboardActivity.createIntent());
                 break;
+            case ACTION_LOGOUT:
+                 removeAccount();
+                   finish();
+                   startActivity(getIntent());
+                break;
             }
             int orgSelected = homeAdapter.getSelected();
             ActionBar actionBar = getSupportActionBar();
@@ -254,6 +269,12 @@ public class HomeActivity extends TabPagerActivity<HomePagerAdapter> implements
                 actionBar.setSelectedNavigationItem(orgSelected);
         }
         return true;
+    }
+
+    private void removeAccount() {
+        AccountManager accountManager = AccountManager.get(HomeActivity.this);
+        Account[] accounts = accountManager.getAccountsByType(ACCOUNT_TYPE);
+        accountManager.removeAccount(accounts[0], null, null);
     }
 
     @Override

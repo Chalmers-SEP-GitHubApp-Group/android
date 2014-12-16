@@ -2,15 +2,9 @@ package com.github.mobile.ui.notification;
 
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import com.github.mobile.ui.user.HomeActivity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,9 +14,6 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryBranch;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.RepositoryService;
-
-import android.app.PendingIntent;
-import javax.management.NotificationListener;
 
 /**
  * Created by Jacob on 2014-12-12.

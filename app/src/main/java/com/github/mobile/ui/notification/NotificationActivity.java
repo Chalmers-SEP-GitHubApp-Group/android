@@ -17,6 +17,7 @@ package com.github.mobile.ui.notification;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+import static com.github.mobile.Intents.EXTRA_NOTIFICATION;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,42 +26,26 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
 import com.github.mobile.Intents;
-import static com.github.mobile.Intents.EXTRA_NOTIFICATION;
 import com.github.mobile.R.drawable;
-import com.github.mobile.R.layout;
-import com.github.mobile.R.string;
 import com.github.mobile.R.id;
-import com.github.mobile.RequestFuture;
-import com.github.mobile.core.issue.IssueFilter;
-import com.github.mobile.persistence.AccountDataManager;
-import com.github.mobile.ui.ConfirmDialogFragment;
+import com.github.mobile.R.layout;
 import com.github.mobile.ui.DialogFragmentActivity;
-import com.github.mobile.ui.issue.FilterListFragment;
-import com.github.mobile.ui.user.HomeActivity;
-import com.google.inject.Inject;
-import com.github.mobile.Intents;
 
-import javax.xml.soap.Text;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
 
-import org.eclipse.egit.github.core.Commit;
 import org.eclipse.egit.github.core.CommitFile;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryCommit;
 import org.eclipse.egit.github.core.client.GitHubClient;
 import org.eclipse.egit.github.core.service.CommitService;
-import org.eclipse.egit.github.core.service.DataService;
 
 /**
  * Activity to display a list of saved {@link com.github.mobile.core.issue.IssueFilter} objects

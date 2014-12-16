@@ -15,6 +15,8 @@
  */
 package com.github.mobile.ui.user;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.github.kevinsawicki.wishlist.SingleTypeAdapter;
+import com.github.mobile.R;
 import com.github.mobile.R.drawable;
 import com.github.mobile.R.id;
 import com.github.mobile.R.layout;
@@ -39,10 +42,7 @@ import org.eclipse.egit.github.core.User;
  */
 public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
 
-    /**
-     * Action for notifications
-     */
-    public static final int ACTION_NOTIFICATION_DASHBOARD = 3;
+
 
     /**
      * Action for Gists
@@ -59,7 +59,14 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
      */
     public static final int ACTION_BOOKMARKS = 2;
 
-    private static final int NON_ORG_ITEMS = 4;
+    /**
+     * Action for notifications
+     */
+    public static final int ACTION_NOTIFICATION_DASHBOARD = 3;
+
+    public static final int ACTION_LOGOUT = 4;
+
+    private static final int NON_ORG_ITEMS = 5;
 
     private final AvatarLoader avatars;
 
@@ -76,7 +83,7 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
      */
     public HomeDropdownListAdapter(final Context context,
             final List<User> orgs, final AvatarLoader avatars) {
-        super(context, layout.org_item);
+        super(context, R.layout.org_item);
 
         this.avatars = avatars;
         inflater = LayoutInflater.from(context);
@@ -132,6 +139,7 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
         all.add(new Object());
         all.add(new Object());
         all.add(new Object());
+        all.add(new Object());
         setItems(all);
         notifyDataSetChanged();
         return this;
@@ -169,7 +177,7 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = initialize(inflater.inflate(layout.org_dropdown_item,
+            convertView = initialize(inflater.inflate(R.layout.org_dropdown_item,
                     null));
         update(position, convertView, getItem(position));
         return convertView;
@@ -190,27 +198,31 @@ public class HomeDropdownListAdapter extends SingleTypeAdapter<Object> {
     @Override
     protected void update(int position, Object item) {
         switch (getAction(position)) {
-        case ACTION_GISTS:
-            setText(0, string.gists);
-            setActionIcon(imageView(1), drawable.dropdown_gist);
-            break;
-        case ACTION_DASHBOARD:
-            setText(0, string.issue_dashboard);
-            setActionIcon(imageView(1), drawable.dropdown_dashboard);
-            break;
-        case ACTION_BOOKMARKS:
-            setText(0, string.bookmarks);
-            setActionIcon(imageView(1), drawable.dropdown_bookmark);
-        break;
-        case ACTION_NOTIFICATION_DASHBOARD:
-            //setText(0, string.bookmarks); TODO fix the string
-            setText(0, "Notification");
-            setActionIcon(imageView(1), drawable.ic_action_email);
-        break;
-        default:
-            User user = (User) item;
-            setText(0, user.getLogin());
-            avatars.bind(imageView(1), user);
+            case ACTION_GISTS:
+                setText(0, string.gists);
+                setActionIcon(imageView(1), drawable.dropdown_gist);
+                break;
+            case ACTION_DASHBOARD:
+                setText(0, string.issue_dashboard);
+                setActionIcon(imageView(1), drawable.dropdown_dashboard);
+                break;
+            case ACTION_BOOKMARKS:
+                setText(0, string.bookmarks);
+                setActionIcon(imageView(1), drawable.dropdown_bookmark);
+                break;
+            case ACTION_NOTIFICATION_DASHBOARD:
+                setText(0, string.notification);
+                setActionIcon(imageView(1), drawable.ic_action_email);
+                break;
+            case ACTION_LOGOUT:
+                setText(0, string.logout);
+                setActionIcon(imageView(1), drawable.dropdown_logout);
+                break;
+            default:
+                User user = (User) item;
+                setText(0, user.getLogin());
+                avatars.bind(imageView(1), user);
         }
+
     }
 }
